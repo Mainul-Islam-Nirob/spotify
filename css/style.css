@@ -160,7 +160,7 @@ body {
 }
 
 .signupbtn:hover {
-    font-size: 17px;
+    transform: scale(1.05);
     color: white
 }
 
@@ -175,8 +175,7 @@ body {
 }
 
 .loginbtn:hover {
-    font-weight: bold;
-    font-size: 17px;
+    transform: scale(1.05);
 }
 
 
