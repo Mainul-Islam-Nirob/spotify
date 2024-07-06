@@ -241,6 +241,9 @@ body {
     gap: 14px;
 }
 
+.arrow:hover{
+    cursor: pointer;
+}
 .songList ul {
     padding: 0 12px;
 }
@@ -396,6 +399,11 @@ body {
     .hamburger {
         display: block;
     }
+    
+    .close {
+        display: block;
+    }
+
 
     .right {
         margin: 0;
@@ -408,10 +416,6 @@ body {
     .cardContainer {
         margin: 0;
         justify-content: center; 
-    }
-
-    .close {
-        display: block;
     }
 
     .abovebar {
