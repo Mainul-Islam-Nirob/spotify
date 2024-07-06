@@ -18,21 +18,30 @@ function secondsToMinutesSeconds(seconds) {
 
 async function getSongs(folder) {
     currFolder = folder;
-    console.log(`Fetching songs from: ./spotify/${folder}/`);
-    let a = await fetch(`../spotify/${folder}/`);
-    let response = await a.text();
-    let div = document.createElement("div");
-    div.innerHTML = response;
-    let as = div.getElementsByTagName("a");
-    songs = [];
-    for (let index = 0; index < as.length; index++) {
-        const element = as[index];
-        if (element.href.endsWith(".mp3")) {
-            songs.push(element.href.split(`${folder}/`)[1]);
-        }
-    }
+    const folderPath = `/spotify/${folder}/`;
+    console.log(`Fetching songs from: ${folderPath}`);
 
-    console.log(`Fetched songs: ${songs}`);
+    try {
+        let a = await fetch(folderPath);
+        if (!a.ok) {
+            throw new Error(`Failed to fetch songs from ${folderPath}`);
+        }
+        let response = await a.text();
+        let div = document.createElement("div");
+        div.innerHTML = response;
+        let as = div.getElementsByTagName("a");
+        songs = [];
+        for (let index = 0; index < as.length; index++) {
+            const element = as[index];
+            if (element.href.endsWith(".mp3")) {
+                songs.push(element.href.split(`${folder}/`)[1]);
+            }
+        }
+
+        console.log(`Fetched songs: ${songs}`);
+    } catch (error) {
+        console.error(error);
+    }
 
     let songUL = document.querySelector(".songList").getElementsByTagName("ul")[0];
     songUL.innerHTML = "";
@@ -58,7 +67,8 @@ async function getSongs(folder) {
 }
 
 const playMusic = (track, pause = false) => {
-    currentSong.src = `./spotify/${currFolder}/` + track;
+    const trackPath = `/spotify/${currFolder}/` + track;
+    currentSong.src = trackPath;
     console.log(`Playing music: ${currentSong.src}`);
     if (!pause) {
         currentSong.play();
@@ -69,49 +79,62 @@ const playMusic = (track, pause = false) => {
 };
 
 async function displayAlbums() {
-    let a = await fetch(`./spotify/songs`);
-    let response = await a.text();
-    let div = document.createElement("div");
-    div.innerHTML = response;
-    let anchors = div.getElementsByTagName("a");
-    let cardContainer = document.querySelector(".cardContainer");
-    let array = Array.from(anchors);
-    for (let index = 3; index < array.length; index++) {
-        const e = array[index]; 
+    const albumsPath = `/spotify/songs`;
+    console.log(`Fetching albums from: ${albumsPath}`);
 
-        if (e.href.includes("/songs")) {
-            let folder = e.href.split("/").slice(-2)[1];
-            let a = await fetch(`./spotify/songs/${folder}/info.json`);
-            let response = await a.json(); 
-            
-            cardContainer.innerHTML += `<div data-folder="${folder}" class="card">
-                <div class="play">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 20V4L19 12L5 20Z" stroke="#141B34" fill="#000" stroke-width="1.5"
-                            stroke-linejoin="round" />
-                    </svg>
-                </div>
-                <img src="./spotify/songs/${folder}/cover.jpg" alt="">
-                <h2>${response.title}</h2>
-                <p>${response.description}</p>
-            </div>`;
+    try {
+        let a = await fetch(albumsPath);
+        if (!a.ok) {
+            throw new Error(`Failed to fetch albums from ${albumsPath}`);
         }
-    }
+        let response = await a.text();
+        let div = document.createElement("div");
+        div.innerHTML = response;
+        let anchors = div.getElementsByTagName("a");
+        let cardContainer = document.querySelector(".cardContainer");
+        let array = Array.from(anchors);
+        for (let index = 3; index < array.length; index++) {
+            const e = array[index];
 
-    Array.from(document.getElementsByClassName("card")).forEach(e => { 
-        e.addEventListener("click", async item => {
-            songs = await getSongs(`songs/${item.currentTarget.dataset.folder}`);
-            playMusic(songs[0]);
+            if (e.href.includes("/songs")) {
+                let folder = e.href.split("/").slice(-2)[1];
+                let a = await fetch(`/spotify/songs/${folder}/info.json`);
+                let response = await a.json();
+
+                cardContainer.innerHTML += `<div data-folder="${folder}" class="card">
+                    <div class="play">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 20V4L19 12L5 20Z" stroke="#141B34" fill="#000" stroke-width="1.5"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <img src="/spotify/songs/${folder}/cover.jpg" alt="">
+                    <h2>${response.title}</h2>
+                    <p>${response.description}</p>
+                </div>`;
+            }
+        }
+
+        Array.from(document.getElementsByClassName("card")).forEach(e => {
+            e.addEventListener("click", async item => {
+                songs = await getSongs(`songs/${item.currentTarget.dataset.folder}`);
+                playMusic(songs[0]);
+            });
         });
-    });
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 async function main() {
-    await getSongs("songs/ncs");
-    playMusic(songs[0], true);
-
-    await displayAlbums();
+    try {
+        await getSongs("songs/ncs");
+        playMusic(songs[0], true);
+        await displayAlbums();
+    } catch (error) {
+        console.error(error);
+    }
 
     play.addEventListener("click", () => {
         if (currentSong.paused) {
@@ -168,7 +191,7 @@ async function main() {
         }
     });
 
-    document.querySelector(".volume>img").addEventListener("click", e => { 
+    document.querySelector(".volume>img").addEventListener("click", e => {
         if (e.target.src.includes("volume.svg")) {
             e.target.src = e.target.src.replace("volume.svg", "mute.svg");
             currentSong.volume = 0;
