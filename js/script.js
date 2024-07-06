@@ -134,7 +134,7 @@ async function displayAlbums() {
 
 async function main() {
     try {
-        songs = await getSongs("songs/ncs");
+        songs = await getSongs("songs/Angry_(mood)");
         if (songs && songs.length > 0) {
             playMusic(songs[0], true);
         } else {
