@@ -22,13 +22,13 @@ async function getSongs(folder) {
     console.log(`Fetching songs from: ${folderPath}`);
 
     try {
-        let a = await fetch(folderPath);
-        if (!a.ok) {
+        let response = await fetch(folderPath);
+        if (!response.ok) {
             throw new Error(`Failed to fetch songs from ${folderPath}`);
         }
-        let response = await a.text();
+        let text = await response.text();
         let div = document.createElement("div");
-        div.innerHTML = response;
+        div.innerHTML = text;
         let as = div.getElementsByTagName("a");
         songs = [];
         for (let index = 0; index < as.length; index++) {
@@ -41,6 +41,11 @@ async function getSongs(folder) {
         console.log(`Fetched songs: ${songs}`);
     } catch (error) {
         console.error(error);
+    }
+
+    if (!songs || songs.length === 0) {
+        console.error(`No songs found in ${folderPath}`);
+        return [];
     }
 
     let songUL = document.querySelector(".songList").getElementsByTagName("ul")[0];
@@ -83,13 +88,13 @@ async function displayAlbums() {
     console.log(`Fetching albums from: ${albumsPath}`);
 
     try {
-        let a = await fetch(albumsPath);
-        if (!a.ok) {
+        let response = await fetch(albumsPath);
+        if (!response.ok) {
             throw new Error(`Failed to fetch albums from ${albumsPath}`);
         }
-        let response = await a.text();
+        let text = await response.text();
         let div = document.createElement("div");
-        div.innerHTML = response;
+        div.innerHTML = text;
         let anchors = div.getElementsByTagName("a");
         let cardContainer = document.querySelector(".cardContainer");
         let array = Array.from(anchors);
@@ -98,8 +103,8 @@ async function displayAlbums() {
 
             if (e.href.includes("/songs")) {
                 let folder = e.href.split("/").slice(-2)[1];
-                let a = await fetch(`songs/${folder}/info.json`);
-                let response = await a.json();
+                let response = await fetch(`songs/${folder}/info.json`);
+                let metadata = await response.json();
 
                 cardContainer.innerHTML += `<div data-folder="${folder}" class="card">
                     <div class="play">
@@ -110,8 +115,8 @@ async function displayAlbums() {
                         </svg>
                     </div>
                     <img src="songs/${folder}/cover.jpg" alt="">
-                    <h2>${response.title}</h2>
-                    <p>${response.description}</p>
+                    <h2>${metadata.title}</h2>
+                    <p>${metadata.description}</p>
                 </div>`;
             }
         }
@@ -129,8 +134,12 @@ async function displayAlbums() {
 
 async function main() {
     try {
-        await getSongs("songs/ncs");
-        playMusic(songs[0], true);
+        songs = await getSongs("songs/ncs");
+        if (songs && songs.length > 0) {
+            playMusic(songs[0], true);
+        } else {
+            console.error("No songs found to play.");
+        }
         await displayAlbums();
     } catch (error) {
         console.error(error);
