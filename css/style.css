@@ -225,6 +225,10 @@ body {
     border-radius: 8px;
 }
 
+.close {
+    filter: invert(1);
+}
+
 .hamburger {
     display: none;
     cursor: pointer;
