@@ -21,22 +21,29 @@ body {
 
 .left {
     width: 25vw;
-    padding: 10px;
+    padding: 10px;    
 }
 
 .right {
     width: 75vw;
 }
 
-
+.left>.home {
+    padding: 18px;
+    margin-bottom: 12px;
+}
 
 .home ul li {
     display: flex;
     gap: 15px;
-    width: 14px;
+    width: 30px;
     list-style: none;
     padding-top: 14px;
     font-weight: bold;
+}
+
+.home img{
+    width: 120px;
 }
 
 .heading {
@@ -48,6 +55,7 @@ body {
     font-weight: bold;
     align-items: center;
     font-size: 13px;
+    
 }
 
 .heading img {
@@ -55,8 +63,9 @@ body {
 }
 
 .library {
-    min-height: 80vh;
     position: relative;
+    border-radius: 8px;
+    box-sizing: border-box;
 }
 
 .footer {
@@ -66,23 +75,31 @@ body {
     gap: 13px;
     position: absolute;
     bottom: 0;
-    padding: 10px 0;
+    padding: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
 
 }
 
 .footer a {
     color: grey;
+    text-decoration: none;
+
 }
 
 .right {
-    margin: 16px 0;
+    margin: 16px 12px 0 0;
     position: relative;
+    height: 100%;
+    padding-bottom: 5px;
+
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     background-color: rgb(34 34 34);
+    border-radius: 8px 8px 0 0;
 }
 
 .header>* {
@@ -91,6 +108,9 @@ body {
 
 .spotifyPlaylists {
     padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .spotifyPlaylists h1 {
@@ -188,9 +208,8 @@ body {
     filter: invert(1);
     background: #e2d9d9;
     border-radius: 10px;
-    width: 90%;
     padding: 12px;
-    width: 70vw;
+    width: 69vw;
     min-height: 40px;
 }
 
@@ -201,9 +220,9 @@ body {
 }
 
 .songList {
-    height: 544px;
-    overflow: auto;
-    margin-bottom: 44px;
+    height: 55vh;
+    box-sizing: border-box;
+    border-radius: 8px;
 }
 
 .hamburger {
@@ -239,15 +258,12 @@ body {
     font-size: 13px;
     width: 344px;
     display: flex;
-    /* justify-content: center; */
     align-items: center;
 
 }
 
 .info div {
-    word-break: break-all;
-    /* display: flex; */
-    
+    word-break: break-all;    
 }
 
 .playnow {
@@ -327,6 +343,7 @@ body {
 }
 
 @media (max-width: 1200px) {
+  
     .left {
         position: absolute;
         left: -130%;
@@ -404,10 +421,6 @@ body {
         overflow-y: unset;
         margin-bottom: 35vh;
     }
-
-    .playbar{
-        right: 25px;
-    }
 }
 
 @media (max-width: 500px) {
@@ -437,9 +450,5 @@ body {
 
     .left{ 
         width: 100vw;
-    }
-
- 
-
-    
+    }   
 }
