@@ -1,6 +1,6 @@
 # Spotify-Clone
 
-This is an clone of spotify, famous music app.
+This is a clone of spotify, famous music app.
 
 ## Table of contents
 
@@ -22,7 +22,7 @@ The final output:
 
 ### Links
 
-#### You will not be able to see the music albums and songs in the online version because I did not host those files :) . I will store the audio files in hosting services later. You can see the screenshot of the app of local version above. Sorry :)
+#### You will not be able to see the music albums and songs in the online version because I did not host those files :) . I will store those audio files in hosting service later. You can see the screenshot of the app of local version above. Sorry :)
 
 Live Site URL Github:[See live app here](https://mainul-islam-nirob.github.io/spotify/)
 Live Site URL Github:[See live app here](https://spotify-nirob.netlify.app/)
